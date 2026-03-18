@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Storecashflow_itemRequest;
-use App\Http\Requests\Updatecashflow_itemRequest;
-use App\Models\cashflow_item;
+use App\Http\Requests\StoreCashflowItemRequest;
+use App\Models\CashflowItem;
+use App\Models\CashflowType;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Resources\CashflowItemCollection;
+use App\Http\Resources\CashflowTypeCollection;
 
 class CashflowItemController extends Controller
 {
@@ -13,7 +18,7 @@ class CashflowItemController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Cashflow/Index', ['cashflow_items' => (new CashflowItemCollection(CashflowItem::with(['cashflowType'])->get()))->collection]);
     }
 
     /**
@@ -21,46 +26,20 @@ class CashflowItemController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Cashflow/Create', [
+            'cashflow_types' => (new CashflowTypeCollection(CashflowType::get()))->collection,
+            'recurring_periods' => RecurringPeriod::cases(),
+            'income_expenditure' => IncomeExpenditure::cases()
+            ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Storecashflow_itemRequest $request)
+    public function store(StoreCashflowItemRequest $request)
     {
-        //
-    }
+        CashflowItem::create(array_merge($request->validated(), ['uuid' => Str::orderedUuid()]));
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(cashflow_item $cashflow_item)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(cashflow_item $cashflow_item)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Updatecashflow_itemRequest $request, cashflow_item $cashflow_item)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(cashflow_item $cashflow_item)
-    {
-        //
+        return Redirect::route('cashflow.index');
     }
 }
