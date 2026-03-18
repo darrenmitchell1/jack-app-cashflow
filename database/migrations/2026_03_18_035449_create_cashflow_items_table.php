@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cashflow_type_id');
             $table->text('description');
             $table->timestamp('applied_from');
-            $table->timestamp('applied_to');
+            $table->timestamp('applied_to')->nullable();
             $table->tinyText('recurring_period');
             $table->tinyText('income_or_expenditure');
             $table->float('value', 2);
