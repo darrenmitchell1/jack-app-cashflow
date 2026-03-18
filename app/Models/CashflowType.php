@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CashflowType extends Model
 {
@@ -30,4 +31,12 @@ class CashflowType extends Model
     protected $hidden = [
         'id'
     ];
+
+    /**
+     * Get the Cashflow Items for the Type
+     */
+    public function cashflowItems(): HasMany
+    {
+        return $this->hasMany(CashflowItem::class);
+    }
 }
