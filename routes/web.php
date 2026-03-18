@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CashflowItemController;
 
-Route::inertia('/', 'Welcome')->name('home');
+// Route::inertia('/', 'Welcome')->name('home');
+
+Route::get('/', [CashflowItemController::class, 'index'])->name('home');
 
 Route::get('/cashflow/create', [CashflowItemController::class, 'create'])->name('cashflow.create');
 Route::get('/cashflow/index', [CashflowItemController::class, 'index'])->name('cashflow.index');
